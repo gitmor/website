@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .gallery {
+            padding: 40px 20px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .image-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .image-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-info {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .image-info h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .image-info p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .no-images {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .no-images h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .no-images p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .upload-instructions {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .upload-instructions h4 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .upload-instructions p {
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        .file-types {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            display: inline-block;
+            font-family: monospace;
+            color: #495057;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🖼️ Image Gallery</h1>
+            <p>Your personal collection of beautiful images</p>
+        </div>
+        
+        <div class="gallery">
+            {% if images %}
+                <div class="gallery-grid">
+                    {% for image in images %}
+                    <div class="image-card">
+                        <img src="{{ url_for('uploaded_file', filename=image) }}" 
+                             alt="{{ image }}" 
+                             loading="lazy">
+                        <div class="image-info">
+                            <h3>{{ image }}</h3>
+                            <p>Click to view full size</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-images">
+                    <h3>No images found</h3>
+                    <p>Add some images to the <code>static/images/</code> folder to see them here!</p>
+                    
+                    <div class="upload-instructions">
+                        <h4>How to add images:</h4>
+                        <p>1. Place your image files in the <code>static/images/</code> directory</p>
+                        <p>2. Supported formats:</p>
+                        <div class="file-types">JPG, JPEG, PNG, GIF, BMP</div>
+                        <p>3. Refresh this page to see your images!</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Add click functionality to view images in full size
+        document.querySelectorAll('.image-card img').forEach(img => {
+            img.addEventListener('click', function() {
+                window.open(this.src, '_blank');
+            });
+        });
+    </script>
+</body>
+</html>
